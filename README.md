@@ -24,7 +24,7 @@
 
 
 
-![oops! picture lost](pictures\folio-okapi.png)
+![oops! picture lost](pictures/folio-okapi.png)
 
 
 
@@ -36,13 +36,13 @@
 
 如果test-module独立运行于web容器中 其请求流程可以理解为下图：
 
-![oops! picture lost](pictures\simple-request-response.png)
+![oops! picture lost](pictures/simple-request-response.png)
 
 
 
 如果通过okapi进行接口发布，则请求处理流程可以**粗略理解** 为下图：
 
-![oops! picture lost](pictures\okapi-request-response.png)
+![oops! picture lost](pictures/okapi-request-response.png)
 
 加入okapi之后的流程 大致可以看做图中**蓝色字体**的说明内容。此处说明一下图中流程(***2***)，okapi接收到http请求之后 会在内部对**请求头信息**以及**请求参数格式**等进行校验，流程(***2***)中省略了很多okapi内部的处理过程，实际上 okapi内部对http请求的校验过程比较复杂，出于应用的目的，本文也不对其内部进行深入说明。
 
@@ -222,7 +222,7 @@ $ git clone https://github.com/folio-org/folio-sample-modules.git
 
 下载之后 $FOLIO_ROOT目录下会有多出一个 ‘folio-sample-modules’目录，进入该目录可以看到其结构：
 
-![oops! picture lost](pictures\folio-sample-dir-structure.png)
+![oops! picture lost](pictures/folio-sample-dir-structure.png)
 
 该目录下分别有’hello-vertx’ ‘simple-vertx’ ‘simple-perl’三个工程，每一个工程可以称为一个**module**，其中’hello-vertx’ ‘simple-vertx’是基于**vert.x框架**实现的java工程，而“simple-perl”是perl语言的工程(不在本文的讨论范围以内) 
 而我们先只用到hello-vertx工程。我们先对该工程简单的做一个介绍，hello-vertx因为使用了vert.x（vertx-web api），所以本身是一个web容器，该工程对外发布了rest接口如下：
@@ -232,7 +232,7 @@ $ git clone https://github.com/folio-org/folio-sample-modules.git
 
 进入该工程目录
 
-![oops! picture lost](pictures\hello-vertx-dir.png)
+![oops! picture lost](pictures/hello-vertx-dir.png)
 
 执行以下命令（请关注***ModuleDescriptor.json***文件中的内容，以及该命令请求的url路径：’***/_/proxy/modules*** ’ ， 关于该路径 本文会在后面的章节进行介绍）
 
@@ -423,11 +423,11 @@ $ java -jar target/folio-hello-vertx-fat.jar
 
 GET方式访问localhost:8080/hello 页面显示Hello world 表示项目运行成功
 
-![oops! picture lost](pictures\get-hello.png)
+![oops! picture lost](pictures/get-hello.png)
 
 可以尝试POST 请求/hello, 一定要在请求头中加入Content-Type:application/json属性,否则会请求失败，因为该接口只接受json数据。
 
-![oops! picture lost](pictures\post-hello.png)
+![oops! picture lost](pictures/post-hello.png)
 
 ##### ModuleDescriptor.json / lanuchDescriptor
 
@@ -574,7 +574,7 @@ Missing Tenant
 
 Okapi和其发布的module之间的关系可以**简单理解**为下图流程(请读者留意图中各个module的**端口号**！)：
 
-![oops! picture lost](pictures\dispatch-comprehension.png)
+![oops! picture lost](pictures/dispatch-comprehension.png)
 
 由上图可以发现，我们对’localhost:9130/hello’接口的访问是**不成功**的。而失败原因是：missing tenant(缺少tenant参数)。
 
@@ -847,7 +847,7 @@ hello-vertx工程是基于vert.x框架实现的，但我们自定义module完全
 
 随着我们微服务系统module的不断扩展，我们系统之内module与module之间接口的调用也许是**无可避免**的！这也是微服务的一个特点。回到官方给出的示例工程目录之下：
 
-![oops! picture lost](pictures\folio-sample-dir-structure.png)
+![oops! picture lost](pictures/folio-sample-dir-structure.png)
 
 这时，请留意simple-vertx工程！这也是官方基于vert.x开发的示例工程，该工程就是一个**module之间互相访问**的例子。
 

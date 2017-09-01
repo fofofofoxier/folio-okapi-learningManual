@@ -24,7 +24,7 @@
 
 
 
-![](/Users/liuchangxing/Downloads/module_management.png)
+![](.\pictures\folio-okapi.png)
 
 
 
@@ -36,13 +36,13 @@
 
 如果test-module独立运行于web容器中 其请求流程可以理解为下图：
 
-![](/Users/liuchangxing/Downloads/QQ20170831-212059@2x.png)
+![](.\pictures\simple-request-response.png)
 
 
 
 如果通过okapi进行接口发布，则请求处理流程可以**粗略理解** 为下图：
 
-![](/Users/liuchangxing/Downloads/QQ20170831-212240@2x.png)
+![](.\pictures\okapi-request-response.png)
 
 加入okapi之后的流程 大致可以看做图中**蓝色字体**的说明内容。此处说明一下图中流程(***2***)，okapi接收到http请求之后 会在内部对**请求头信息**以及**请求参数格式**等进行校验，流程(***2***)中省略了很多okapi内部的处理过程，实际上 okapi内部对http请求的校验过程比较复杂，出于应用的目的，本文也不对其内部进行深入说明。
 
@@ -160,25 +160,25 @@ java [java-options] -jar path/okapi-core-fat.jar command [options]
 
 注：由于目前的情景前提是**只有一个okapi节点**，因此在前一节 启动okapi的命令中 command参数为 dev
 
-参数说明官网已经详细指出，此处引用之(初识okapi的读者 ！！***请跳过以下相关的小节***！！ ，直接阅读 “**2. 在网关中注册module的接口信息**”一章)：
+参数说明官网已经详细指出，此处引用之(初识okapi的读者 ！！***请跳过以下相关的内容***！！ ，直接阅读 “**2. 在网关中注册module的接口信息**”一章)：
 
 **Java -D options**
 
 The -D option can be used to specify various run-time parameters in Okapi. These must be at the beginning of the command line, before the -jar.
 
-- **port**: The port on which Okapi listens. Defaults to 9130
-- **port_start and port_end**: The range of ports for modules. Default to port+1 to port+10, normally 9131 to 9141
-- **host**: Hostname to be used in the URLs returned by the deployment service. Defaults to localhost
-- **storage**: Defines the storage back end, postgres, mongo or (the default) inmemory
-- **loglevel**: The logging level. Defaults to INFO; other useful values are DEBUG, TRACE, WARN and ERROR.
-- **okapiurl**: Tells Okapi its own official URL. This gets passed to the modules as X-Okapi-Url header, and the modules can use this to make further requests to Okapi. Defaults to http://localhost:9130 or what ever port specified. There should be no trailing slash, but if there happens to be one, Okapi will remove it.
-- **dockerUrl**: Tells the Okapi deployment where the Docker Daemon is. Defaults to http://localhost:4243.
-- **postgres_host** : PostgreSQL host. Defaults to localhost.
-- **postgres_port** : PostgreSQL port. Defaults to 5432.
-- **postgres_username** : PostgreSQL username. Defaults to okapi.
-- **postgres_password**: PostgreSQL password. Defaults to okapi25.
-- **postgres_database**: PostgreSQL database. Defaults to okapi.
-- **postgres_db_init**: For a value of 1, Okapi will drop existing PostgreSQL database and prepare a new one. A value of 0(null) will leave it unmodified (default).
+- `port`: The port on which Okapi listens. Defaults to 9130
+- `port_start` and `port_end`: The range of ports for modules. Default to port+1 to port+10, normally 9131 to 9141
+- `host`: Hostname to be used in the URLs returned by the deployment service. Defaults to localhost
+- `storage`: Defines the storage back end, **postgres**, **mongo** or (the default) **inmemory**
+- `loglevel`: The logging level. Defaults to INFO; other useful values are DEBUG, TRACE, WARN and ERROR.
+- `okapiurl`: Tells Okapi its own official URL. This gets passed to the modules as X-Okapi-Url header, and the modules can use this to make further requests to Okapi. Defaults to http://localhost:9130 or what ever port specified. There should be no trailing slash, but if there happens to be one, Okapi will remove it.
+- `dockerUrl`: Tells the Okapi deployment where the Docker Daemon is. Defaults to http://localhost:4243.
+- `postgres_host` : PostgreSQL host. Defaults to **localhost**.
+- `postgres_port` : PostgreSQL port. Defaults to **5432**.
+- `postgres_username` : PostgreSQL username. Defaults to **okapi**.
+- `postgres_password`: PostgreSQL password. Defaults to **okapi25**.
+- `postgres_database`: PostgreSQL database. Defaults to **okapi**.
+- `postgres_db_init`: For a value of 1, Okapi will drop existing PostgreSQL database and prepare a new one. A value of 0(null) will leave it unmodified (default).
 
 
 
@@ -186,13 +186,13 @@ The -D option can be used to specify various run-time parameters in Okapi. These
 
 Okapi requires exactly one command to be given. These are:
 
-- **cluster** for running in clustered mode/production
-- **dev** for running in development, single-node mode
-- **deployment** for deployment only. Clustered mode
-- **proxy** for proxy + discovery. Clustered mode
-- **help** to list command-line options and commands
-- **initdatabase** drop existing data if available and initializes database
-- **purgedatabase** drop existing data and tables
+- `cluster` for running in clustered mode/production
+- `dev` for running in development, single-node mode
+- `deployment` for deployment only. Clustered mode
+- `proxy` for proxy + discovery. Clustered mode
+- `help` to list command-line options and commands
+- `initdatabase` drop existing data if available and initializes database
+- `purgedatabase` drop existing data and tables
 
 
 
@@ -200,12 +200,12 @@ Okapi requires exactly one command to be given. These are:
 
 These options are at the end of the command line:
 
-- **-hazelcast-config-cp *file*** -- Read config from class path
-- **-hazelcast-config-file *file*** -- Read config from local file
-- **-hazelcast-config-url *url*** -- Read config from URL
-- **-enable-metrics** -- Enables the sending of various metrics to a Carbon back end.
-- **-cluster-host *ip*** -- Vertx cluster host
-- **-cluster-port *port*** -- Vertx cluster port
+- `-hazelcast-config-cp [file]` -- Read config from class path
+- `-hazelcast-config-file [file]` -- Read config from local file
+- `-hazelcast-config-url [url]` -- Read config from URL
+- `-enable-metrics` -- Enables the sending of various metrics to a Carbon back end.
+- `-cluster-host [ip]` -- Vertx cluster host
+- `-cluster-port [port]` -- Vertx cluster port
 
 
 
@@ -222,7 +222,7 @@ $ git clone https://github.com/folio-org/folio-sample-modules.git
 
 下载之后 $FOLIO_ROOT目录下会有多出一个 ‘folio-sample-modules’目录，进入该目录可以看到其结构：
 
-![](/Users/liuchangxing/Downloads/QQ20170831-220335@2x.png)
+![](.\pictures\folio-sample-dir-structure.png)
 
 该目录下分别有’hello-vertx’ ‘simple-vertx’ ‘simple-perl’三个工程，每一个工程可以称为一个**module**，其中’hello-vertx’ ‘simple-vertx’是基于**vert.x框架**实现的java工程，而“simple-perl”是perl语言的工程(不在本文的讨论范围以内) 
 而我们先只用到hello-vertx工程。我们先对该工程简单的做一个介绍，hello-vertx因为使用了vert.x（vertx-web api），所以本身是一个web容器，该工程对外发布了rest接口如下：
@@ -232,7 +232,7 @@ $ git clone https://github.com/folio-org/folio-sample-modules.git
 
 进入该工程目录
 
-![](/Users/liuchangxing/Downloads/QQ20170831-220357@2x.png)
+![](.\pictures\hello-vertx-dir.png)
 
 执行以下命令（请关注***ModuleDescriptor.json***文件中的内容，以及该命令请求的url路径：’***/_/proxy/modules*** ’ ， 关于该路径 本文会在后面的章节进行介绍）
 
@@ -249,35 +249,20 @@ $ curl -w '\n' -X POST -D -   \
 
 ```json
 // ModuleDescriptor.json文件内容
-
 {
-
   "id" : "hello",
-
   "name" : "Hello World",
-
   "provides" : [ {
-
     "id" : "hello",
-
     "version" : "1.1",
-
       "handlers" : [ {
-
       "methods" : [ "GET", "POST" ],
-
       "pathPattern" : "/hello"
-
     } ]
-
   } ],
-
   "launchDescriptor" : {
-
     "dockerImage" : "folio-hello-module" //请**留意**此属性！！！！
-
   }
-
 }
 ```
 
@@ -288,14 +273,12 @@ $ curl -w '\n' -X POST -D -   \
 + hello-vertx工程的部署方式为通过docker启动(**由dockerImage属性得知**)
 
 执行了curl命令 将ModuleDescriptor.json信息发送给okapi之后，会获得如下console信息
-
+```shell
 //↓↓↓↓↓↓↓↓↓↓↓↓↓响应信息↓↓↓↓↓↓↓↓↓↓↓↓↓
 HTTP/1.1 201 Created
 Content-Type: application/json
 Location: /_/proxy/modules/hello
 Content-Length: 283
-
-```json
 {
   "id" : "hello",
   "name" : "Hello World",
@@ -333,35 +316,20 @@ $ cd $FOLIO_ROOT/folio-sample-modules/hello-vertx
 
 ```dockerfile
 ### ================= Dockerfile =========
-
 # vert.x docker example using a Java verticle packaged as a fatjar
-
 # To build:
-
 # docker build -t folio-hello-module .
-
 # To run:
-
 # docker run -t -i -p 8080:8080 folio-hello-module
-
 ## #
-
 FROM java:8
-
 ENV VERTICLE_FILE folio-hello-vertx-fat.jar
-
 # Set the location of the verticles
-
 ENV VERTICLE_HOME /usr/verticles
-
 EXPOSE 8080
-
 # Copy your fat jar to the container
-
 COPY target/$VERTICLE_FILE $VERTICLE_HOME/module.jar
-
 # Launch the verticle
-
 WORKDIR $VERTICLE_HOME
 ENTRYPOINT ["java", "-jar", "module.jar"]
 ```
@@ -455,11 +423,11 @@ $ java -jar target/folio-hello-vertx-fat.jar
 
 GET方式访问localhost:8080/hello 页面显示Hello world 表示项目运行成功
 
-![](/Users/liuchangxing/Downloads/QQ20170831-223727@2x.png)
+![](.\pictures\get-hello.png)
 
 可以尝试POST 请求/hello, 一定要在请求头中加入Content-Type:application/json属性,否则会请求失败，因为该接口只接受json数据。
 
-![](/Users/liuchangxing/Downloads/QQ20170831-223854@2x.png)
+![](.\pictures\post-hello.png)
 
 ##### ModuleDescriptor.json / lanuchDescriptor
 
@@ -606,7 +574,7 @@ Missing Tenant
 
 Okapi和其发布的module之间的关系可以**简单理解**为下图流程(请读者留意图中各个module的**端口号**！)：
 
-![](/Users/liuchangxing/Downloads/QQ20170831-225736@2x.png)
+![](.\pictures\dispatch-comprehension.png)
 
 由上图可以发现，我们对’localhost:9130/hello’接口的访问是**不成功**的。而失败原因是：missing tenant(缺少tenant参数)。
 
@@ -724,7 +692,12 @@ Okapi本身就是一个web服务,为了更好的维护okapi中的信息，Okapi�
 
 这四个okapi服务的主要用途如下(摘自官网)
 
-![](/Users/liuchangxing/Downloads/QQ20170831-231410@2x.png)
+- The `/_/proxy` endpoint is used for configuring the proxying service: specifying which modules we know of, how their requests are to be routed, which tenants we know about, and which modules are enabled for which tenants.
+- The `/_/discovery` endpoint manages the mapping from service IDs to network addresses on the cluster. Information is posted to it, and the proxy service will query it to find where the needed modules are actually available. It also offers shortcuts for deploying and registering a module in one go. There is only a single discovery endpoint covering all of the nodes in a cluster. Requests to the discovery service can also deploy modules on specific nodes, so it is rarely necessary to invoke deployment directly.
+- The `/_/deployment` endpoint is responsible for deploying modules. In a clustered environment there should be one instance of the deployment service running on each node. It will be responsible for starting processes on that node, and allocating network addresses for the various service modules. It is mostly used internally, by the discovery service, but is left open in case some cluster management system could make use of it.
+- The `/_/env` endpoint is used to manage environment variables -- system-wide properties that are passed to modules during deployment.
+
+
 
 更详细的API官网也说明(第二个链接为okapi最核心的API文档 可能需要翻墙访问)：
 
@@ -874,7 +847,7 @@ hello-vertx工程是基于vert.x框架实现的，但我们自定义module完全
 
 随着我们微服务系统module的不断扩展，我们系统之内module与module之间接口的调用也许是**无可避免**的！这也是微服务的一个特点。回到官方给出的示例工程目录之下：
 
-![](/Users/liuchangxing/Downloads/QQ20170831-220335@2x.png)
+![](E:\myGithubRepo\folio-okapi-learningManual\pictures\folio-sample-dir-structure.png)
 
 这时，请留意simple-vertx工程！这也是官方基于vert.x开发的示例工程，该工程就是一个**module之间互相访问**的例子。
 
@@ -907,7 +880,7 @@ simple-vertx工程也提供了HTTP接口，接口路径为’/simple’，可以
 
 
 
-如果不出现错误信息，则说明工程部署成功。但是由于docker的HOST解析原因，很可能会出现’Connection refused : localhost/127.0.0.1’之类的信息。出现这种情况，则只需要在启动okapi网关的命令中加一个okapiurl参数(指定为本机ip)即可，或者更改docker相关的配置文件 [参看此处](https://github.com/folio-org/folio-sample-modules#linux)
+如果不出现错误信息，则说明工程部署成功。**但是**由于docker的HOST解析等相关原因(具体细节不详)，**很可能**会出现’Connection refused : localhost/127.0.0.1’之类的错误信息(以作者的运行环境Ubuntu16.04LTS 可能会有此类错误，其他操作系统没有试过)。出现这种情况，则只需要在启动okapi网关的命令中加一个okapiurl参数(指定为本机ip)即可，或者更改docker相关的配置文件 [参看此处](https://github.com/folio-org/folio-sample-modules#linux)
 
 更改后的命令如下：
 
@@ -923,11 +896,11 @@ $ java -Dloglevel=DEBUG –Dokapiurl=”http://xxx.xxx.x.xx:9130” -jar okapi-c
 
 ### Modules和Tenants的信息持久化(postgreSQL)
 
-细心的读者可能已经注意到，如果我们将已经运行着的okapi用CTRL+C的方法停掉，则所有关于modules和tenants的信息全部都会丢失。重新启动okapi之后，想要部署原先的项目，就必须要从注册module 部署module 创建tenant 授权等步骤全部重新执行一遍。这样方便于开发者，但是实际的生产环境中，我们需要把tenants modules 以及他们之间的授权关系持久化到数据库之中。
+细心的读者可能已经注意到，如果我们将已经运行着的okapi用CTRL+C的方法停掉，则所有关于modules和tenants的信息全部都会丢失。重新启动okapi之后，想要部署原先的项目，就必须要从注册module 部署module 创建tenant 授权等步骤全部重新执行一遍（即所有的信息都是在内存之中）。这样方便于开发者，但是实际的生产环境中，我们需要把tenants modules 以及他们之间的授权关系持久化到数据库之中。
 
 本节以postgreSQL数据库为例，讲述如何将这些重要的数据持久化到postgreSQL库中。
 
-(读者请自行安装postgreSQL数据库，作者建议用**新版本**)
+读者请自行安装postgreSQL数据库，建议用**最新版本（作者的环境:postgreSQL9.5）**
 
 我们先在postgreSQL中创建一个名字叫’okapi’的user，密码设置为’okapi25’，在创建一个名字为’okapi’的库，指定该库的所有者为okapi ：
 

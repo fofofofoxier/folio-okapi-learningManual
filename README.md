@@ -4,7 +4,7 @@
 
 ## 前言
 
-说到okapi，则必须先要了解FOLIO(future of library is open)：FOLIO是一套开源的，云服务基础应用框架，专门为了解决图书馆业务需求而设计。而okapi则是FOLIO之内的核心微服务组件。
+说到okapi，则必须先要了解[FOLIO](http://dev.folio.org)(future of library is open)：FOLIO是一套开源的，云服务基础应用框架，专门为了解决图书馆业务需求而设计。而okapi则是FOLIO之内的核心微服务组件。
 
 
 

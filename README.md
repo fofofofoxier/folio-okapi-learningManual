@@ -14,7 +14,7 @@
       + [3.部署module](####3.部署module)
       + [4.module的两种部署方式](####4.module的两种部署方式)
       + + [实验](#####实验)
-        + [ModuleDescriptor.json / lanuchDescriptor](#####ModuleDescriptor.json / lanuchDescriptor)
+        + [ModuleDescriptor.json / lanuchDescriptor](#####ModuleDescriptor.json/lanuchDescriptor)
         + [另一种部署方式](#####另一种部署方式)
       + [TenantDescriptor和TenantModuleDescriptor](####TenantDescriptor和TenantModuleDescriptor)
       + + [Okapi与Module的端口关系](#####Okapi与Module的端口关系)
@@ -36,9 +36,9 @@
 ------
 
 
-# Okapi应用说明书
+#Okapi应用说明书
 
-## 前言
+##前言
 
 说到okapi，则必须先要了解[FOLIO](http://dev.folio.org)(future of library is open)：FOLIO是一套开源的，云服务基础应用框架，专门为了解决图书馆业务需求而设计。而okapi则是FOLIO之内的核心微服务组件。
 

@@ -981,7 +981,178 @@ curl -w '\n' -X POST -D - \
 
 ### Okapi的集群化部署
 
-由于时间紧促，从本章以后的内容有待后续更新。此处先暂时提供官网相关章节的链接：[https://github.com/folio-org/okapi/blob/master/doc/guide.md#running-in-cluster-mode](https://github.com/folio-org/okapi/blob/master/doc/guide.md#running-in-cluster-mode)
+此处先提供官网相关章节的链接：[https://github.com/folio-org/okapi/blob/master/doc/guide.md#running-in-cluster-mode](https://github.com/folio-org/okapi/blob/master/doc/guide.md#running-in-cluster-mode)
+
+---
+
+到目前为止，所有的例子都是在`dev`模式下运行在单个服务器节点。单机模式之下对于演示流程、开发等工作来说非常方便，但是在实际生产环境中，我们需要在一个集群之上来运行。
+
+#### 单个服务器之上
+
+在同一个机器上运行多个okapi实例是运行okapi集群的最简单的方式。实际当中并不建议这么做，但是这样对于演示和理解很有帮助。
+
+开启新的console，并启动你的第一个Okapi。
+
+```shell
+java -jar okapi-core/target/okapi-core-fat.jar cluster
+```
+
+Okapi 打印出了`dev` mode 下的启动信息。有趣的是 消息中会出现类似如下内容:
+
+```shell
+Hazelcast 3.6.3 (20160527 - 08b28c3) starting at Address[172.17.42.1]:5701
+```
+
+信息里说，我们用了Hazelcast（vert.x用于实现clustering的工具），并且在host address为172.17.42.1的节点上监听了5701端口。端口的指定是默认的。但是Hazelcast会去寻找一个没有被占用的端口，所以okapi实际上可能会去监听其他的free port。这个address是我们机器的地址，在他的一个接口上，后面我们会详细的提到。
+
+开启另一个console，启动另一个Okapi实例。因为在同一机器上，我们不能让两个实例去监听同一端口。Okapi默认会分配20个端口给不同的modules，所以，我们新的实例去监听9150端口:
+
+```
+java -Dport=9150 -jar okapi-core/target/okapi-core-fat.jar cluster
+```
+
+新的okapi又打印了启动信息，但是请注意第一个okapi实例同时也会打印出一些新信息。这两个okapi实例产生了联系，并且可以互相通信。
+
+现在，你可以让okapi列出所有的已知节点。现在打开第三个console，然后执行如下命令:
+
+`curl -w '\n' -D - http://localhost:9130/_/discovery/node`
+
+输出信息如下:
+
+```shell
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 186
+
+[ {
+  "nodeId" : "0d3f8e19-84e3-43e7-8552-fc151cf5abfc",
+  "url" : "http://localhost:9150"
+}, {
+  "nodeId" : "6f8053e1-bc55-48b4-87ef-932ad370081b",
+  "url" : "http://localhost:9130"
+} ]
+```
+
+最终，okapi列出了两个节点。他们各自都有一个可供访问的url 和一个以uuid为值的nodeId。
+
+我们可以让另一个节点列出所有节点（只需要把请求的端口改为9150）,结果应该跟上一步完全一样，但也许顺序有差别。
+
+#### 不同的服务器之上
+
+当然，我们肯定想要在多机器的环境来部署集群，这才是所谓真正意义的“集群” 。
+
+***Warning*** : okapi应用的是HazelCast 的 Library 来管理集群的搭建步骤，并且应用 “multicast packs” 来发现集群中的节点。Multicast 在绝大多数的有线网络中是好用的，但是在无线网络中表现不是很好:**"THAT WILL NOT WORK ! "** 。针对这个问题是有workaround的，但是这涉及到hazelcast-config-file，这个hazelcast-config-file存储着我们集群中的ip-address信息，这个很复杂，此处不进行深入讨论。
+
+除了几个细节之外，不同服务器之上的集群搭建流程几乎和单机版是完全一样的。首先，因为在不同机器上不会有冲突，所以我们没有必要再去指定不同的端口了。然而，我们**必须确定**所有的机器是属于***同一个***网络！现代的linux主机都具有多个网络接口，尤其是至少有一个以太网接口，和 loopback interface。 而且经常会有wifi接口，并且 如果我们用到了docker，docker会建立一个属于自己的内部网络。我们可以指定 `sudo ifconfig`来列出这些接口信息。Okapi不好决定使用哪一个网络接口(Okapi is not clever enough to do this)，所以我们必须告诉okapi如何去做。我们可以执行如下命令来完成这件事：
+
+```
+java -jar okapi-core/target/okapi-core-fat.jar cluster -cluster-host 10.0.0.2
+```
+
+请注意 `cluster-host` option必须要在command line 的**最后**一个位置。这个参数的名称可能会给人以误导，实际上 这不是一个hostname，而是一个ip address！
+
+在同一网络的另一台机器上再启动一个Okapi。此处一定要注意`cluster-host`所指定的 IP address千万不要写错了！ 如果一切顺利，那么这两台机器之间应该可以互相访问啦！ 我们可以在两个机器都看见日志。现在你可以让okapi（任意节点都可以）列出集群中所有节点。
+
+`curl -w '\n' -D - http://localhost:9130/_/discovery/nodes`
+
+```shell
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 186
+
+[ {
+  "nodeId" : "81d1d7ca-8ff1-47a0-84af-78cfe1d05ec2",
+  "url" : "http://localhost:9130"
+}, {
+  "nodeId" : "ec08b65d-f7b1-4e78-925b-0da18af49029",
+  "url" : "http://localhost:9130"
+} ]
+```
+
+注意到，两个节点有着不同的uuid，但是又有着相同的url。他们都生成自己可以在`http://localhost:9130`被访问到。确实是这样，但是从技术含义上来讲，如果你在节点本身的环境上运行 `curl`命令，那么 localhost:9130自然会指定到本机。但是如果从另一个okapi节点访问，或者网络中的其他地方，就不能用localhost了。解决方式就是添加一个command line参数告诉okapi节点 自己应该使用什么hostname。
+
+现在停掉Okapi，并用以下命令重启:
+
+```shell
+java -Dhost=tapas -jar okapi-core/target/okapi-core-fat.jar cluster -cluster-host 10.0.0.2
+```
+
+除了“tapas” , 还可以用我们启动Okapi节点所在的主机名 甚至IP Address去访问集群。又一次，我们获取到了节点列表
+
+`curl -w '\n' -D - http://localhost:9130/_/discovery/nodes`
+
+```shell
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 178
+
+[ {
+  "nodeId" : "40be7787-657a-47e4-bdbf-2582a83b172a",
+  "url" : "http://jamon:9130"
+}, {
+  "nodeId" : "953b7a2a-94e9-4770-bdc0-d0b163861e6a",
+  "url" : "http://tapas:9130"
+} ]
+```
+
+url也可以这样指定 :
+
+`curl -w '\n' -D - http://tapas:9130/_/discovery/nodes`
+
+```shell
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 178
+
+[ {
+  "nodeId" : "40be7787-657a-47e4-bdbf-2582a83b172a",
+  "url" : "http://jamon:9130"
+}, {
+  "nodeId" : "953b7a2a-94e9-4770-bdc0-d0b163861e6a",
+  "url" : "http://tapas:9130"
+} ]
+```
+
+#### 节点的命名
+
+之前提到过，HazelCast system给节点分配UUID。这都完全没有问题，但是使用起来不方便，UUID在每次启动的时候都会改变。所以，在我们的部署脚本中指定nodeId非常的不容易。我们可以利用command line的参数来对节点进行命名，就像这样：
+
+```shell
+java -Dhost=tapas -Dnodename=MyFirstNode \
+  -jar okapi-core/target/okapi-core-fat.jar cluster -cluster-host 10.0.0.2
+```
+
+如果现在我们列出所有节点，就可以看见类似下面的信息：`curl -w '\n' -D - http://tapas:9130/_/discovery/nodes`
+
+```shell
+HTTP/1.1 200 OK
+Content-Type: application/json
+X-Okapi-Trace: GET okapi-1.11.1-SNAPSHOT /_/discovery/nodes : 200
+Content-Length: 120
+
+[ {
+  "nodeId" : "7d6dc0e7-c163-4bbd-ab48-a5d7fa6c4ce4",
+  "url" : "http://tapas:9130",
+  "nodeName" : "MyFirstNode"
+} ]
+```
+
+在许多地方我们可以用nodeName而不用nodeId，例如：`curl -w '\n' -D - http://tapas:9130/_/discovery/nodes/myFirstNode`
+
+##### 现在我们有了一个集群
+
+Okapi集群就像之前我们见到过的单机版Okapi是非常相似的。大多数情况之下，和任意一个okapi节点交互都是可以的(具体与哪一个节点交互无关紧要)，他们共享所有的信息。我们可以用一个节点创建一个module，通过另一个节点创建tenant，然后回到第一个节点再enable module to tenant 。我们必须在deploy moudle的时候格外的小心，因为我们需要自己决定module在哪一个节点去运行。之前单节点的例子只用了“localhost”作为nodeId去部署，现在我们要使用的则是node的UUID(此前已经见过多次)。部署了module之后，我们可以用任意想要的okapi节点创建这个module的proxy traffic。
+
+有一些小的不同点我们需要注意:
+
+* in-memory 的后台信息在集群中所有的节点都是共享信息的。意思就是说，如果我们停掉了其中一个节点，然后再重新启动它，它会同步其他节点的信息，并且整个集群还是信息共享的。只有所有节点都停止运行的情况下，数据才会在内存中消失。Of course 用postgreSQL数据库做底层可以实现数据的持久化。
+* 我们可以用 `/_/deployment`服务去deploy modules。这**必须要**在你的目的节点上运行！okapi会把部署事件信息提示到其他节点。正常来讲，我们应该通过`/_/discovery`服务部署module，并指定nodeId。
+* 启动okapi的过程会变得稍微久一些
+
+还有两种`clustering mode`可供使用:
+
+* `deployment` : 以`cluster`  mode启动okapi，但是没有做任何代理。对于一个集群，它对外值只提供一个visible node并且其他节点以`deployment` mode运行，这样的结构是非常有用的。
+* `proxy` : 这个mode正相反，该模式下的okapi节点接收所有的请求，并将这些请求转发到`deployment` mode节点。对外来说，这是一个代表性的节点(译者注: 简单来说就是代理)。当一个集群的节点数很多，node之间的traffic关系变得很复杂的情况下(这种情况下，仅仅是proxying的工作就会完全占用节点的性能)，`proxy` mode 的存在意义就彰显出来了。
 
 
 

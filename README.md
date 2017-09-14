@@ -1,43 +1,5 @@
 [TOC]
 
-##### 注:由于时间原因，目录的部分索引点击没有效果，作者会尽量挤出时间进行修正
-
-# 目录
-
-+ [Okapi应用说明书](#Okapi应用说明书)
-+ + [前言](#前言)
-  + [okapi简介](#okapi简介)
-  + [okapi的使用](#okapi的使用)
-  + + [okapi系统要求](#okapi系统要求)
-    + [运行](#运行)
-    + + [1.启动网关](#1.启动网关)
-      + + [okapi通用命令](#okapi通用命令)
-      + [2.在网关中注册module的接口信息](#2.在网关中注册module的接口信息)
-      + [3.部署module](#3.部署module)
-      + [4.module的两种部署方式](#4.module的两种部署方式)
-      + + [实验](#实验)
-        + [ModuleDescriptor.json / lanuchDescriptor](#ModuleDescriptor.json/lanuchDescriptor)
-        + [另一种部署方式](#另一种部署方式)
-      + [TenantDescriptor和TenantModuleDescriptor](#TenantDescriptor和TenantModuleDescriptor)
-      + + [Okapi与Module的端口关系](#Okapi与Module的端口关系)
-        + [Tenant](#Tenant)
-      + [小结](#小结)
-    + [维护](#维护)
-    + + [okapi的接口](#Okapi的接口)
-    + [创建自己的module](#创建自己的module)
-    + [Module之间的互相访问/调用](#Module之间的互相访问/调用)
-    + [Modules和Tenants的信息持久化(postgreSQL)](#Modules和Tenants的信息持久化(postgreSQL))
-    + [Module的版本更新](#Module的版本更新)
-    + [Okapi的集群化部署](#Okapi的集群化部署)
-  + [总结](#总结)
-  + [联系方式](#联系方式)
-
-
-
-
-------
-
-
 # Okapi应用说明书
 
 ## 前言
@@ -51,6 +13,8 @@
 
 
 作者建议：本文主要内容是作者自从研究okapi以来，使用okapi的个人心得以及常见问题解决方案的小规模总结，比较适合读者快速入门。因为okapi的官方文档已经非常详细，所有为了简化不必要的叙述，本文中有多处直接引用或者复制了官方文档。在阅读本文时，请读者***务必留意特殊字体***的部分，这些部分是作者认为比较重要或者有助于深入学习的内容。读者可沿着本文的思路作为学习路线，在大体了解本文之后，需要消息深入学习的知识则可以根据文档链接（或者直接访问FOLIO[官方网站](http://dev.folio.org)），进行拓展补充。
+
+补充说明:从 okapi的集群化部署 一章开始，文档多数是官方文档的翻译，个别处有“译者注”，部分内容也是作者根据原文即个人理解，尽量翻译为通顺的中文。
 
 
 
@@ -338,7 +302,7 @@ Content-Length: 283
 
 
 
-#### 3.部署module
+#### 3.部署module。
 
 学习本章 需要先了解okapi是如何发布module的。（**本章需要读者安装docker**）
 

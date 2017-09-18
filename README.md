@@ -31,7 +31,7 @@
     - [Okapi的集群化部署](#Okapi的集群化部署)
   - [总结](#总结)
   - [联系方式](#联系方式)
-  - [假装这里有版权声明](#假装这里有版权声明)
+  - [License](#License)
 
 ---
 
@@ -1211,8 +1211,15 @@ FaceBook：lcxlcx511  (Chason Luis)
 
 
 
-## 假装这里有版权声明
+## License
 
-首先，本人不懂的什么版权，不知道版权具体是干啥的，所以在这里我们先假装这里有一个版权声明（哈哈哈）。本人撰写此篇文档目的是为了方便其他图书馆行业的开发人员 以及其他想要了解okapi的开发人员提供绵薄之力，同时也为了方便FOLIO团队在中国扩展国内用户(虽然目前来看，应该木有人会看)。So，转载请标明出处和作者。如果在本文档发布之前，任何其他关于okapi的说明文档的发布跟本人无关，本人不承担任何责任。
+**GNU GENERAL PUBLIC LICENSE**
+Version 3, 29 June 2007
 
-：）
+Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
+
+Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.
+
+**注**:本人撰写此篇文档目的是为了方便其他图书馆行业的开发人员 以及其他想要了解okapi的开发人员提供绵薄之力，同时也为了方便FOLIO团队在中国扩展国内用户(虽然目前来看，应该木有人会看)。So，转载请标明出处和作者。如果在本文档发布之前，任何其他关于okapi的说明文档的发布跟本人无关，本人不承担任何责任。
+
+: ）

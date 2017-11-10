@@ -53,7 +53,7 @@
 
 补充说明:从 okapi的集群化部署 一章开始，文档多数是官方文档的翻译，个别处有“译者注”，部分内容也是作者根据原文即个人理解，尽量翻译为通顺的中文。
 
-
+Okapi认证机制翻译文档(Okapi Security) [Link](./doc-security/folio-security.md)
 
 ## okapi简介
 

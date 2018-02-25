@@ -273,7 +273,7 @@ message存储与database。motd-module需要向database-module发出请求，dat
 + 下一个要访问的module是motd-module
 + 检查motd-module在哪里运行
 + 发现一个以供访问motd模块的 module-token
-+ 想motd-module发起请求：
++ 向motd-module发起请求：
   + X-Okapi-Tenant: ourlib
   + X-Okapi-Token: xx-joe-ourlib-motd-xx
   + X-Okapi-Permissions: [ "motd.staff" ]
@@ -340,7 +340,7 @@ message存储与database。motd-module需要向database-module发出请求，dat
 + 构建一个OK-response，响应消息中存储着db中的消息
 + 返回响应消息到Okapi
 
-**2.18: Okapi从db-module获取OK-response**
+**2.18: Okapi从motd-module获取OK-response**
 
 + 因为motd-module是module-list当中的最后一个，okapi将相应信息返回到调用者
 

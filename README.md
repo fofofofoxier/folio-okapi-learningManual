@@ -273,6 +273,8 @@ $ git clone https://github.com/folio-org/folio-sample-modules.git
 
 执行以下命令（请关注***ModuleDescriptor.json***文件中的内容，以及该命令请求的url路径：’***/_/proxy/modules*** ’ ， 关于该路径 本文会在后面的章节进行介绍）
 
+**补充说明：在较新版本的官网sample工程当中，ModuleDescriptor.json和DeploymentDescriptor.json是随着工程的编译而生成于target目录之下的，此处请读者留意。**
+
 ```shell
 $ curl -w '\n' -X POST -D -   \
    -H "Content-type: application/json"   \
@@ -916,8 +918,9 @@ simple-vertx工程也提供了HTTP接口，接口路径为’/simple’，可以
    ```
 
 
+如果不出现错误信息，则说明工程部署成功。**但是**由于docker的HOST解析等相关原因(具体细节不详)，**很可能**会出现’Connection refused : localhost/127.0.0.1’之类的错误信息(以作者的运行环境Ubuntu16.04LTS 可能会有此类错误，其他操作系统没有试过)。出现这种情况，则只需要在启动okapi网关的命令中加一个okapiurl参数(指定为本机ip)即可，或者更改docker相关的配置文件 [参看此处](https://github.com/folio-org/folio-sample-modules#linux)。
 
-如果不出现错误信息，则说明工程部署成功。**但是**由于docker的HOST解析等相关原因(具体细节不详)，**很可能**会出现’Connection refused : localhost/127.0.0.1’之类的错误信息(以作者的运行环境Ubuntu16.04LTS 可能会有此类错误，其他操作系统没有试过)。出现这种情况，则只需要在启动okapi网关的命令中加一个okapiurl参数(指定为本机ip)即可，或者更改docker相关的配置文件 [参看此处](https://github.com/folio-org/folio-sample-modules#linux)
+补充说明：出现上述情况的原因还有可能是因为，okapi在授予模块访问权限给租客的时候，对应模块的docker进程还没有完全启动，此时模块还不能提供http服务，所以会显示拒绝连接。如果等待几秒，直至模块完全启动，然后再做授权操作，这时授权操作才可以成功。
 
 更改后的命令如下：
 
